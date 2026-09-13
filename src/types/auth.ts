@@ -1,7 +1,7 @@
-export type UserRole = 'student' | 'faculty';
+export type UserRole = 'student' | 'faculty' | 'admin';
 
 export interface UserProfile {
-  id: string; // Registration Number (e.g. 23BCE1088) or Employee ID (e.g. EMP10245)
+  id: string; // Registration Number (e.g. 23BCE1088), Employee ID (e.g. EMP10245), or Admin ID (e.g. ADM1001)
   name: string;
   email: string;
   role: UserRole;

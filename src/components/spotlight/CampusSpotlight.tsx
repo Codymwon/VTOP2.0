@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Award, Bell, ExternalLink, ChevronRight, Building2, BookOpen } from 'lucide-react';
+import { Award, Bell, ChevronRight, BookOpen, ShieldCheck } from 'lucide-react';
 import { CampusNotice, UniversityAccreditation } from '../../types/auth';
 
 const ACCREDITATIONS: UniversityAccreditation[] = [
@@ -206,20 +206,12 @@ export const CampusSpotlight: React.FC = () => {
             <span>Academic Calendar</span>
           </a>
           <a
-            href="#parent-portal"
+            href="#admin-desk"
             onClick={(e) => e.preventDefault()}
             className="hover:text-white transition-colors flex items-center gap-1.5 py-1 min-h-[36px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] rounded"
           >
-            <Building2 className="w-3.5 h-3.5 text-blue-300" />
-            <span>Parent Desk</span>
-          </a>
-          <a
-            href="#alumni"
-            onClick={(e) => e.preventDefault()}
-            className="hover:text-white transition-colors flex items-center gap-1.5 py-1 min-h-[36px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] rounded"
-          >
-            <ExternalLink className="w-3.5 h-3.5 text-blue-300" />
-            <span>Alumni Network</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-purple-300" />
+            <span>Admin Desk</span>
           </a>
         </div>
         <span className="text-[10px] sm:text-[11px] text-blue-200/70 font-mono font-medium">

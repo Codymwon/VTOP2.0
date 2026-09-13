@@ -7,7 +7,7 @@ import { AuthForm } from '../components/auth/AuthForm';
 import { OtpModal } from '../components/auth/OtpModal';
 import { CampusSpotlight } from '../components/spotlight/CampusSpotlight';
 import { MobileAppBadges } from '../components/spotlight/MobileAppBadges';
-import { Users, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export const PreLoginScreen: React.FC = () => {
   const { login, verifyOtp, resendOtp, apiMode } = useAuth();
@@ -17,7 +17,6 @@ export const PreLoginScreen: React.FC = () => {
   const [isOtpOpen, setIsOtpOpen] = useState(false);
   const [otpEmailMasked, setOtpEmailMasked] = useState<string | undefined>(undefined);
   const [otpCooldownSeconds, setOtpCooldownSeconds] = useState<number>(180);
-  const [portalNotice, setPortalNotice] = useState<{ title: string; desc: string } | null>(null);
 
   const handleLoginSubmit = async (credentials: {
     username: string;
@@ -51,17 +50,6 @@ export const PreLoginScreen: React.FC = () => {
   const handleResendOtp = async (): Promise<ResendOtpResult> => {
     return await resendOtp();
   };
-
-  // Close portal notice modal on Escape
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && portalNotice) {
-        setPortalNotice(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [portalNotice]);
 
   return (
     <div className="min-h-[100dvh] lg:h-[100dvh] flex flex-col lg:flex-row bg-slate-50 relative lg:overflow-hidden">
@@ -158,42 +146,8 @@ export const PreLoginScreen: React.FC = () => {
               isLoading={isSubmitting}
             />
 
-            {/* Alternative Legacy Portals (Parent & Alumni Links) */}
-            <div className="mt-3.5 pt-3 border-t border-slate-100 text-center">
-              <span className="text-xs text-slate-500 block mb-1.5 font-medium">
-                Need access to secondary portals?
-              </span>
-              <div className="flex items-center justify-center gap-4 text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setPortalNotice({
-                    title: 'VIT-AP Parent Portal',
-                    desc: 'The Parent Information Desk provides real-time access to student attendance, academic progress reports, and fee payment receipts. Authenticate using your registered parent mobile number or email.'
-                  })}
-                  className="text-slate-600 hover:text-[#176CB8] min-h-[40px] flex items-center gap-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] rounded-lg py-1 px-2 cursor-pointer"
-                >
-                  <img src="/assets/img/parent.png" alt="" className="w-4 h-4 object-contain" aria-hidden="true" />
-                  <span>Parent Portal</span>
-                </button>
-
-                <span className="text-slate-300">•</span>
-
-                <button
-                  type="button"
-                  onClick={() => setPortalNotice({
-                    title: 'VIT-AP Alumni Global Network',
-                    desc: 'Alumni portal facilitates transcript requests, degree verification, alumni association memberships, and campus visit coordination.'
-                  })}
-                  className="text-slate-600 hover:text-[#176CB8] min-h-[40px] flex items-center gap-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] rounded-lg py-1 px-2 cursor-pointer"
-                >
-                  <img src="/assets/img/alumni.png" alt="" className="w-4 h-4 object-contain" aria-hidden="true" />
-                  <span>Alumni Portal</span>
-                </button>
-              </div>
-            </div>
-
             {/* Mobile App Download Integration */}
-            <div className="mt-3">
+            <div className="mt-4 pt-3.5 border-t border-slate-100">
               <MobileAppBadges />
             </div>
           </div>
@@ -226,46 +180,6 @@ export const PreLoginScreen: React.FC = () => {
         onClose={() => setIsOtpOpen(false)}
         isMockMode={apiMode === 'mock'}
       />
-
-      {/* Secondary Portal Notice Modal */}
-      {portalNotice && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="portal-notice-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
-        >
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#176CB8]/10 text-[#176CB8] mb-3">
-              <Users className="w-6 h-6" />
-            </div>
-            <h3 id="portal-notice-title" className="text-base font-bold text-slate-900">
-              {portalNotice.title}
-            </h3>
-            <p className="text-xs text-slate-600 mt-2 mb-5 leading-relaxed">
-              {portalNotice.desc}
-            </p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setPortalNotice(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
-                Dismiss
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setPortalNotice(null);
-                }}
-                className="flex-1 min-h-[44px] py-2.5 px-4 bg-[#176CB8] hover:bg-[#2455A3] text-white font-semibold rounded-xl text-xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8]"
-              >
-                Proceed
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

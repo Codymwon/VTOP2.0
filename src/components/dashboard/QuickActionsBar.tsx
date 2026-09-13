@@ -76,7 +76,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({
               key={act.id}
               type="button"
               onClick={act.onClick}
-              className="group p-3 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:border-[#176CB8] hover:shadow-xs text-left flex flex-col justify-between min-h-[76px] transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8]"
+              className="group p-3 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:border-[#176CB8] hover:shadow-xs active:scale-[0.98] text-left flex flex-col justify-between min-h-[76px] transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8]"
             >
               <div className="w-8 h-8 rounded-lg bg-white border border-slate-200/80 text-[#176CB8] group-hover:bg-[#176CB8] group-hover:text-white group-hover:border-[#176CB8] flex items-center justify-center transition-all mb-2.5 shadow-2xs">
                 <Icon className="w-4 h-4" aria-hidden="true" />

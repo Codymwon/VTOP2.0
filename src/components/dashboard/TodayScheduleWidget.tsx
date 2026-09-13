@@ -32,7 +32,7 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = ({
         <button
           type="button"
           onClick={onOpenFullTimetable}
-          className="text-xs font-bold text-[#176CB8] hover:text-[#2455A3] hover:underline flex items-center gap-1 min-h-[40px] px-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
+          className="text-xs font-bold text-[#176CB8] hover:text-[#2455A3] hover:underline flex items-center gap-1 min-h-[44px] px-2.5 py-1.5 rounded-lg active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
         >
           <span>Weekly Grid</span>
           <ChevronRight className="w-3.5 h-3.5" />

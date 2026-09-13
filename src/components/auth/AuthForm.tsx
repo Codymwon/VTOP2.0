@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { UserRole, LoginResult } from '../../types/auth';
-import { Eye, EyeOff, Lock, User, AlertCircle, Loader2, ArrowRight, HelpCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, AlertCircle, Loader2, ArrowRight, HelpCircle, ShieldCheck } from 'lucide-react';
 
 interface AuthFormProps {
   role: UserRole;
@@ -44,7 +44,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       setUsername(saved);
     } else {
       // Default placeholder pre-fill for fast testing
-      setUsername(role === 'student' ? '23BCE1088' : 'EMP10245');
+      setUsername(role === 'student' ? '23BCE1088' : role === 'faculty' ? 'EMP10245' : 'ADM1001');
       setPassword('password123');
     }
     setErrorMessage(null);
@@ -63,7 +63,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     const cleanUsername = username.trim().toUpperCase();
     if (!cleanUsername) {
-      triggerError(role === 'student' ? 'Please enter your Registration Number.' : 'Please enter your Employee ID.');
+      triggerError(
+        role === 'student'
+          ? 'Please enter your Registration Number.'
+          : role === 'faculty'
+          ? 'Please enter your Employee ID.'
+          : 'Please enter your Administrator ID.'
+      );
       return;
     }
 
@@ -99,6 +105,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   };
 
   const isStudent = role === 'student';
+  const isFaculty = role === 'faculty';
+  const isAdmin = role === 'admin';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3" noValidate>
@@ -126,11 +134,15 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           htmlFor="auth-username"
           className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1"
         >
-          {isStudent ? 'Registration Number' : 'Employee ID'}
+          {isStudent ? 'Registration Number' : isFaculty ? 'Employee ID' : 'Administrator ID'}
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-            <User className="w-4.5 h-4.5" aria-hidden="true" />
+            {isAdmin ? (
+              <ShieldCheck className="w-4.5 h-4.5 text-[#7C3AED]" aria-hidden="true" />
+            ) : (
+              <User className="w-4.5 h-4.5" aria-hidden="true" />
+            )}
           </div>
           <input
             id="auth-username"
@@ -146,12 +158,22 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               setUsername(e.target.value.toUpperCase());
               if (errorMessage) setErrorMessage(null);
             }}
-            placeholder={isStudent ? 'e.g. 23BCE1088' : 'e.g. EMP10245'}
-            className="w-full pl-10 pr-4 py-2.5 min-h-[44px] bg-slate-50 border border-slate-300 rounded-xl text-sm sm:text-base text-slate-900 font-medium placeholder-slate-400 tracking-wide focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#176CB8] focus:border-transparent transition-all"
+            placeholder={isStudent ? 'e.g. 23BCE1088' : isFaculty ? 'e.g. EMP10245' : 'e.g. ADM1001'}
+            className={`w-full pl-10 pr-4 py-2.5 min-h-[44px] bg-slate-50 border border-slate-300 rounded-xl text-sm sm:text-base text-slate-900 font-medium placeholder-slate-400 tracking-wide focus:bg-white focus:outline-none focus:border-transparent transition-all ${
+              isAdmin
+                ? 'focus:ring-2 focus:ring-[#7C3AED]'
+                : isFaculty
+                ? 'focus:ring-2 focus:ring-[#B7950B]'
+                : 'focus:ring-2 focus:ring-[#176CB8]'
+            }`}
           />
         </div>
         <p id="auth-username-desc" className="mt-1 text-[11px] text-slate-600 font-medium">
-          {isStudent ? 'Format: Year + Branch + Roll (e.g. 23BCE1088)' : 'Official VIT-AP faculty or administrative ID'}
+          {isStudent
+            ? 'Format: Year + Branch + Roll (e.g. 23BCE1088)'
+            : isFaculty
+            ? 'Official VIT-AP faculty or employee ID (e.g. EMP10245)'
+            : 'Central administration, COE, warden or registrar ID (e.g. ADM1001)'}
         </p>
       </div>
 
@@ -228,7 +250,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full min-h-[46px] py-3 px-6 rounded-xl font-bold text-white bg-[#176CB8] hover:bg-[#2455A3] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] focus-visible:ring-offset-2 transition-all shadow-md shadow-[#176CB8]/25 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+        className={`w-full min-h-[46px] py-3 px-6 rounded-xl font-bold text-white active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer ${
+          isAdmin
+            ? 'bg-[#6D28D9] hover:bg-[#5B21B6] focus-visible:ring-[#7C3AED] shadow-[#6D28D9]/25'
+            : isFaculty
+            ? 'bg-[#183668] hover:bg-[#122b52] focus-visible:ring-[#2455A3] shadow-[#183668]/25'
+            : 'bg-[#176CB8] hover:bg-[#2455A3] focus-visible:ring-[#176CB8] shadow-[#176CB8]/25'
+        }`}
       >
         {isLoading ? (
           <>
@@ -237,7 +265,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           </>
         ) : (
           <>
-            <span>Sign In to VTOP</span>
+            <span>{isAdmin ? 'Sign In as Administrator' : isFaculty ? 'Sign In as Faculty / Staff' : 'Sign In to VTOP'}</span>
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </>
         )}
@@ -259,7 +287,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               </h3>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed mb-4">
-              To safeguard your academic records, password resets are handled through the university identity directory:
+              To safeguard institutional accounts, password resets are handled through the university identity directory:
             </p>
             <ul className="text-xs text-slate-600 space-y-2 mb-5 list-disc pl-5">
               <li>
@@ -267,6 +295,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               </li>
               <li>
                 <strong>Faculty & Staff:</strong> Contact University IT Helpdesk at extension <strong>#1040</strong> or email <code>it.helpdesk@vitap.ac.in</code>.
+              </li>
+              <li>
+                <strong>Administrators:</strong> Contact the Security Operations Center (SOC) & Registrar Office at <code>security.admin@vitap.ac.in</code>.
               </li>
             </ul>
             <button

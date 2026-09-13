@@ -337,12 +337,12 @@ export const HostelOutingPageView: React.FC<HostelOutingPageViewProps> = ({
                 <tbody className="divide-y divide-slate-100">
                   {filteredOutings.map((record, idx) => (
                     <tr key={record.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3.5 px-3 text-center text-slate-400 font-medium tabular-nums">
+                      <td className="py-3.5 px-3 text-center text-slate-500 font-medium tabular-nums">
                         {idx + 1}
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
+                          <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0" aria-hidden="true" />
                           <span>{record.placeOfVisit}</span>
                         </div>
                         {record.outingType && (
@@ -411,7 +411,7 @@ export const HostelOutingPageView: React.FC<HostelOutingPageViewProps> = ({
                             <span>Outpass</span>
                           </button>
                         ) : (
-                          <span className="text-slate-400 text-xs font-mono">-</span>
+                          <span className="text-slate-500 text-xs font-mono">-</span>
                         )}
                       </td>
                     </tr>
@@ -675,7 +675,7 @@ export const HostelOutingPageView: React.FC<HostelOutingPageViewProps> = ({
                   type="button"
                   onClick={() => setShowPolicy(!showPolicy)}
                   aria-label="Toggle policy details"
-                  className="text-slate-400 hover:text-slate-700 text-xs p-1 cursor-pointer"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 text-xs cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8]"
                 >
                   {showPolicy ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
@@ -906,7 +906,7 @@ export const HostelOutingPageView: React.FC<HostelOutingPageViewProps> = ({
                     <span className="font-semibold block text-slate-700">Breakfast</span>
                     <span className="text-[11px] font-sans tabular-nums">07:30 AM - 09:00 AM</span>
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
                     Completed
                   </span>
                 </div>
@@ -917,7 +917,7 @@ export const HostelOutingPageView: React.FC<HostelOutingPageViewProps> = ({
                     <span className="font-semibold block text-slate-700">Lunch</span>
                     <span className="text-[11px] font-sans tabular-nums">12:30 PM - 02:00 PM</span>
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
                     Completed
                   </span>
                 </div>

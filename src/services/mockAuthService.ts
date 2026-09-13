@@ -57,7 +57,7 @@ class MockAuthService {
         campus: 'VIT-AP University, Amaravati',
         avatarUrl: undefined,
       };
-    } else {
+    } else if (credentials.role === 'faculty') {
       user = {
         id: username.startsWith('EMP') ? username : 'EMP10245',
         name: 'Dr. Hussain Syed',
@@ -65,6 +65,16 @@ class MockAuthService {
         role: 'faculty',
         department: 'Department of Software and Systems Engineering',
         designation: 'Professor & Head of UI/UX Research Lab',
+        campus: 'VIT-AP University, Amaravati',
+      };
+    } else {
+      user = {
+        id: username.startsWith('ADM') ? username : 'ADM1001',
+        name: 'Dr. S. K. Narayanan',
+        email: `${username.toLowerCase()}@vitap.ac.in`,
+        role: 'admin',
+        department: 'Office of the Registrar & Central Operations',
+        designation: 'Chief Administrative Officer & Registrar',
         campus: 'VIT-AP University, Amaravati',
       };
     }

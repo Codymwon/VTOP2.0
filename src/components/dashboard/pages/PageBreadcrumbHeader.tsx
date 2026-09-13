@@ -26,7 +26,7 @@ export const PageBreadcrumbHeader: React.FC<PageBreadcrumbHeaderProps> = ({
           <button
             type="button"
             onClick={onBackToDashboard}
-            className="flex items-center gap-1 hover:text-[#176CB8] font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] rounded px-1.5 py-1 min-h-[36px] sm:min-h-[40px]"
+            className="flex items-center gap-1 hover:text-[#176CB8] font-medium transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] rounded px-2 py-1.5 min-h-[44px] active:scale-[0.98]"
           >
             <Home className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Dashboard</span>
@@ -40,7 +40,7 @@ export const PageBreadcrumbHeader: React.FC<PageBreadcrumbHeaderProps> = ({
         <button
           type="button"
           onClick={onBackToDashboard}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 hover:text-slate-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 hover:text-slate-900 active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
           <span className="hidden sm:inline">Back to Dashboard</span>
@@ -68,7 +68,7 @@ export const PageBreadcrumbHeader: React.FC<PageBreadcrumbHeaderProps> = ({
               type="button"
               onClick={onPrint}
               aria-label="Print Current Page"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer shadow-2xs"
             >
               <Printer className="w-4 h-4 text-slate-500" aria-hidden="true" />
               <span>Print Page</span>

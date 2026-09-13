@@ -36,9 +36,20 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   unreadCount = 3,
   onSelectSection,
 }) => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  const displayName = user?.name || student.name;
+  const displayId = user?.id || student.regNo;
+  const userRole = user?.role || 'student';
+  const initials = displayName
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -101,7 +112,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               }}
               aria-label="Home Dashboard"
               title="Home Dashboard"
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
             >
               <Home className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -111,7 +122,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               onClick={handlePrint}
               aria-label="Print Current View"
               title="Print Page"
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
             >
               <Printer className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -121,7 +132,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               onClick={() => alert('Current semester saved to your favorites bar!')}
               aria-label="Favorite this view"
               title="Add to Favorites"
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 active:scale-[0.98] transition-all flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
             >
               <Star className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -137,7 +148,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           >
             <div className="flex items-center gap-2">
               <Search className="w-4 h-4 text-blue-200" aria-hidden="true" />
-              <span className="truncate">Search courses, attendance, timetable...</span>
+              <span className="truncate">
+                {userRole === 'admin'
+                  ? 'Search student ID, approvals, biometric logs, circulars...'
+                  : userRole === 'faculty'
+                  ? 'Search course slots, student roster, submissions...'
+                  : 'Search courses, attendance, timetable...'}
+              </span>
             </div>
             <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-bold bg-white/15 border border-white/20 rounded text-white shadow-xs">
               Ctrl K
@@ -188,15 +205,31 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
               className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 min-h-[44px] rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#176CB8] border border-white/30 text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                AM
+              <div
+                className={`w-8 h-8 rounded-lg border border-white/30 text-white font-bold text-xs flex items-center justify-center shadow-xs ${
+                  userRole === 'admin'
+                    ? 'bg-[#6D28D9]'
+                    : userRole === 'faculty'
+                    ? 'bg-[#B7950B]'
+                    : 'bg-[#176CB8]'
+                }`}
+              >
+                {initials}
               </div>
               <div className="hidden lg:flex flex-col text-left">
                 <span className="font-mono font-bold text-xs text-white leading-tight tracking-wide">
-                  {student.regNo}
+                  {displayId}
                 </span>
-                <span className="text-[10px] text-blue-200/80 uppercase font-semibold leading-tight">
-                  Student
+                <span
+                  className={`text-[10px] uppercase font-semibold leading-tight ${
+                    userRole === 'admin'
+                      ? 'text-purple-200'
+                      : userRole === 'faculty'
+                      ? 'text-amber-200'
+                      : 'text-blue-200/80'
+                  }`}
+                >
+                  {userRole === 'admin' ? 'Admin' : userRole === 'faculty' ? 'Faculty' : 'Student'}
                 </span>
               </div>
               <ChevronDown
@@ -216,45 +249,150 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               >
                 {/* User Info Header */}
                 <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/70">
-                  <p className="text-xs font-bold text-slate-900 leading-snug">
-                    {student.name}
-                  </p>
-                  <p className="text-[11px] font-mono font-semibold text-[#176CB8] mt-0.5">
-                    {student.regNo} • {student.program}
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <p className="text-xs font-bold text-slate-900 leading-snug">
+                      {displayName}
+                    </p>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border capitalize ${
+                        userRole === 'admin'
+                          ? 'bg-purple-50 text-purple-800 border-purple-200'
+                          : userRole === 'faculty'
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
+                          : 'bg-blue-50 text-blue-800 border-blue-200'
+                      }`}
+                    >
+                      {userRole}
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-mono font-semibold text-[#176CB8]">
+                    {displayId} • {user?.designation || user?.program || student.program}
                   </p>
                   <div className="mt-2 flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
                     <Shield className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
-                    <span>Hosteller: {student.hostelBlock}, Room {student.roomNo}</span>
+                    <span>
+                      {userRole === 'admin'
+                        ? 'Institutional Administrator • Full Governance'
+                        : userRole === 'faculty'
+                        ? `${user?.department || 'Department Faculty'} • Verified`
+                        : `Hosteller: ${student.hostelBlock}, Room ${student.roomNo}`}
+                    </span>
                   </div>
                 </div>
 
                 {/* Menu Items */}
                 <div className="py-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsProfileMenuOpen(false);
-                      onSelectSection?.('studentprofile');
-                    }}
-                    role="menuitem"
-                    className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer text-left"
-                  >
-                    <User className="w-4 h-4 text-slate-500" aria-hidden="true" />
-                    <span>View Student Profile & Biodata</span>
-                  </button>
+                  {userRole === 'admin' ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('adminouting');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <Shield className="w-4 h-4 text-purple-600" aria-hidden="true" />
+                        <span>Hostel Outing Approval Desk</span>
+                      </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsProfileMenuOpen(false);
-                      onSelectSection?.('timetable');
-                    }}
-                    role="menuitem"
-                    className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer text-left"
-                  >
-                    <Calendar className="w-4 h-4 text-slate-500" aria-hidden="true" />
-                    <span>Academic Timetable & Schedule</span>
-                  </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('adminacademics');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <Calendar className="w-4 h-4 text-purple-600" aria-hidden="true" />
+                        <span>Space & Scheduling Audit</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('adminusers');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <User className="w-4 h-4 text-purple-600" aria-hidden="true" />
+                        <span>User & Biometric Directory</span>
+                      </button>
+                    </>
+                  ) : userRole === 'faculty' ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('facultycourses');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <Calendar className="w-4 h-4 text-amber-600" aria-hidden="true" />
+                        <span>My Courses & Teaching Slots</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('facultyattendance');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <Shield className="w-4 h-4 text-teal-600" aria-hidden="true" />
+                        <span>Class Attendance Tracker</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('facultyproctor');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <User className="w-4 h-4 text-[#176CB8]" aria-hidden="true" />
+                        <span>Student Mentorship Roster</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('studentprofile');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <User className="w-4 h-4 text-slate-500" aria-hidden="true" />
+                        <span>View Student Profile & Biodata</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen(false);
+                          onSelectSection?.('timetable');
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs text-slate-700 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-slate-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#176CB8]"
+                      >
+                        <Calendar className="w-4 h-4 text-slate-500" aria-hidden="true" />
+                        <span>Academic Timetable & Schedule</span>
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 {/* Destructive / Sign Out Action (Isolated per UI/UX Pro Max rule) */}
@@ -266,9 +404,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                       setIsProfileMenuOpen(false);
                       logout();
                     }}
-                    className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs font-semibold text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-colors cursor-pointer text-left"
+                    className="w-full flex items-center gap-2.5 px-4 py-3 min-h-[44px] text-xs font-semibold text-rose-700 hover:bg-rose-50 hover:text-rose-800 active:scale-[0.99] transition-all cursor-pointer text-left focus:outline-none focus-visible:bg-rose-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-rose-600"
                   >
-                    <LogOut className="w-4 h-4 text-rose-500" aria-hidden="true" />
+                    <LogOut className="w-4 h-4 text-rose-600" aria-hidden="true" />
                     <span>Sign Out from VTOP</span>
                   </button>
                 </div>

@@ -33,7 +33,7 @@ export const AttendancePulseWidget: React.FC<AttendancePulseWidgetProps> = ({
         <button
           type="button"
           onClick={onOpenFullAttendance}
-          className="text-xs font-bold text-[#176CB8] hover:text-[#2455A3] hover:underline flex items-center gap-1 min-h-[40px] px-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
+          className="text-xs font-bold text-[#176CB8] hover:text-[#2455A3] hover:underline flex items-center gap-1 min-h-[44px] px-2.5 py-1.5 rounded-lg active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
         >
           <span>Full Details</span>
           <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -102,17 +102,17 @@ export const AttendancePulseWidget: React.FC<AttendancePulseWidgetProps> = ({
                 </span>
 
                 {isDanger ? (
-                  <span className="font-bold text-rose-700 flex items-center gap-1 text-[11px]">
-                    <AlertTriangle className="w-3 h-3" aria-hidden="true" />
+                  <span className="font-bold text-rose-800 flex items-center gap-1 text-[11px]">
+                    <AlertTriangle className="w-3 h-3 text-rose-700" aria-hidden="true" />
                     Debarred: need {rec.classesNeededFor75} classes
                   </span>
                 ) : rec.safeClassesToMiss > 0 ? (
-                  <span className="font-semibold text-emerald-700 flex items-center gap-1 text-[11px]">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" aria-hidden="true" />
+                  <span className="font-semibold text-emerald-800 flex items-center gap-1 text-[11px]">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-700" aria-hidden="true" />
                     Can miss {rec.safeClassesToMiss} {rec.safeClassesToMiss === 1 ? 'class' : 'classes'}
                   </span>
                 ) : (
-                  <span className="font-semibold text-amber-700 text-[11px]">
+                  <span className="font-semibold text-amber-800 text-[11px]">
                     Margin tight: attend next class
                   </span>
                 )}
@@ -128,7 +128,7 @@ export const AttendancePulseWidget: React.FC<AttendancePulseWidgetProps> = ({
           <button
             type="button"
             onClick={() => setIsExpanded((prev) => !prev)}
-            className="w-full py-2 min-h-[44px] text-xs font-semibold text-slate-600 hover:text-[#176CB8] hover:bg-slate-50 rounded-xl transition-all flex items-center justify-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
+            className="w-full py-2 min-h-[44px] text-xs font-semibold text-slate-700 hover:text-[#176CB8] hover:bg-slate-50 rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
           >
             <span>{isExpanded ? 'Show Primary Courses (5)' : `Show All ${records.length} Courses (+${records.length - 5} more)`}</span>
             <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} aria-hidden="true" />

@@ -33,7 +33,7 @@ export const UpcomingTasksWidget: React.FC<UpcomingTasksWidgetProps> = ({
         <button
           type="button"
           onClick={onOpenAssignments}
-          className="text-xs font-bold text-[#176CB8] hover:text-[#2455A3] hover:underline flex items-center gap-1 min-h-[40px] px-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
+          className="text-xs font-bold text-[#176CB8] hover:text-[#2455A3] hover:underline flex items-center gap-1 min-h-[44px] px-2.5 py-1.5 rounded-lg active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#176CB8] cursor-pointer"
         >
           <span>All Tasks ({assignments.length})</span>
           <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
