@@ -22,6 +22,7 @@ import {
   Compass,
   Radio,
   ShieldCheck,
+  MessageSquareText,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -44,15 +45,18 @@ const CATEGORY_ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 };
 
 const SUB_ITEM_ICONS: Record<string, React.FC<{ className?: string }>> = {
+  courses: BookOpen,
   attendance: CheckCircle2,
   timetable: Calendar,
   assignments: FileText,
+  examschedule: Calendar,
   marks: Award,
   grades: GraduationCap,
   hostelouting: MapPin,
   hostelroom: Building2,
   payments: Receipt,
   studentprofile: User,
+  feedback: MessageSquareText,
   // Faculty Sub-items
   facultycourses: BookOpen,
   facultyattendance: CheckCircle2,
@@ -66,6 +70,7 @@ const SUB_ITEM_ICONS: Record<string, React.FC<{ className?: string }>> = {
   adminfinance: Receipt,
   admincirculars: Radio,
   adminusers: User,
+  adminfeedback: MessageSquareText,
   // Backward compatibility
   weekendouting: MapPin,
   generalouting: MapPin,
@@ -284,7 +289,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </div>
 
-      {/* Footer: IT Helpdesk Contact */}
+      {/* Footer: IT Helpdesk Contact & Portal UI Feedback */}
       <div className="p-2.5 px-3 border-t border-slate-100 bg-slate-50/70 shrink-0">
         <div className="flex items-center justify-between text-[10px] text-slate-500">
           <a
@@ -295,7 +300,15 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
             <LifeBuoy className="w-3.5 h-3.5 text-[#176CB8]" aria-hidden="true" />
             <span>Helpdesk: Ext. 1040</span>
           </a>
-          <span className="font-semibold text-slate-500">VIT-AP</span>
+          <button
+            type="button"
+            onClick={() => handleItemClick(user?.role === 'admin' ? 'adminfeedback' : 'feedback')}
+            className="flex items-center gap-1 font-bold text-[#176CB8] hover:text-[#135796] hover:underline cursor-pointer py-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#176CB8] rounded"
+            title="Submit Portal UI Feedback & Bug Reports"
+          >
+            <MessageSquareText className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>UI Feedback</span>
+          </button>
         </div>
       </div>
     </div>

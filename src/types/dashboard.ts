@@ -112,6 +112,22 @@ export interface GradeItem {
   examMonth: string;
 }
 
+export interface ExamScheduleItem {
+  id: string;
+  courseCode: string;
+  courseTitle: string;
+  courseType: string;
+  slot: string;
+  examType: 'CAT-1' | 'CAT-2' | 'FAT (Final Assessment Test)' | 'Lab FAT';
+  examDate: string;
+  session: 'FN' | 'AN';
+  examTime: string;
+  reportingTime: string;
+  venue: string;
+  seatNo: string;
+  status: 'Scheduled' | 'Completed' | 'In Progress';
+}
+
 export interface DigitalAssignmentItem {
   id: string;
   courseCode: string;

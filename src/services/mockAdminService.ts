@@ -377,6 +377,7 @@ export const MOCK_ADMIN_NAV_CATEGORIES: NavCategory[] = [
     iconName: 'UserCheck',
     items: [
       { id: 'adminusers', label: 'User & Biometric Directory', href: '#adminusers' },
+      { id: 'adminfeedback', label: 'Portal UI Feedback & Telemetry', href: '#adminfeedback', badge: '4 New' },
     ],
   },
 ];

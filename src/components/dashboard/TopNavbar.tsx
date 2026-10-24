@@ -15,6 +15,7 @@ import {
   User,
   Shield,
   Calendar,
+  MessageSquareText,
 } from 'lucide-react';
 
 interface TopNavbarProps {
@@ -25,6 +26,7 @@ interface TopNavbarProps {
   onOpenNotifications: () => void;
   unreadCount?: number;
   onSelectSection?: (sectionId: string) => void;
+  onOpenQuickFeedback?: () => void;
 }
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
@@ -35,6 +37,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   onOpenNotifications,
   unreadCount = 3,
   onSelectSection,
+  onOpenQuickFeedback,
 }) => {
   const { user, logout } = useAuth();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -178,6 +181,21 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             className="sm:hidden p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
           >
             <Search className="w-5 h-5" aria-hidden="true" />
+          </button>
+
+          {/* Quick UI Feedback Trigger */}
+          <button
+            type="button"
+            onClick={
+              onOpenQuickFeedback ||
+              (() => onSelectSection?.(userRole === 'admin' ? 'adminfeedback' : 'feedback'))
+            }
+            aria-label="Submit Portal UI Feedback & Bug Reports"
+            title="UI Feedback & Bug Reports"
+            className="p-2 min-h-[44px] min-w-[44px] rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3497DB] cursor-pointer"
+          >
+            <MessageSquareText className="w-4 h-4 text-emerald-300" aria-hidden="true" />
+            <span className="hidden md:inline text-xs font-semibold text-blue-100">Feedback</span>
           </button>
 
           {/* Notifications Trigger */}

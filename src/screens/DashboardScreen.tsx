@@ -26,6 +26,8 @@ import { AssignmentsPageView } from '../components/dashboard/pages/AssignmentsPa
 import { HostelOutingPageView } from '../components/dashboard/pages/HostelOutingPageView';
 import { ProfilePageView } from '../components/dashboard/pages/ProfilePageView';
 import { PaymentsPageView } from '../components/dashboard/pages/PaymentsPageView';
+import { CoursesPageView } from '../components/dashboard/pages/CoursesPageView';
+import { StudentFeedbackPageView } from '../components/dashboard/pages/StudentFeedbackPageView';
 
 // Dedicated Faculty Subpage Views
 import { FacultyCoursesPageView } from '../components/dashboard/pages/faculty/FacultyCoursesPageView';
@@ -40,6 +42,8 @@ import { AdminAcademicsPageView } from '../components/dashboard/pages/admin/Admi
 import { AdminFinanceAuditPageView } from '../components/dashboard/pages/admin/AdminFinanceAuditPageView';
 import { AdminCircularsPageView } from '../components/dashboard/pages/admin/AdminCircularsPageView';
 import { AdminUserDirectoryPageView } from '../components/dashboard/pages/admin/AdminUserDirectoryPageView';
+import { AdminFeedbackPageView } from '../components/dashboard/pages/admin/AdminFeedbackPageView';
+import { QuickFeedbackModal } from '../components/dashboard/QuickFeedbackModal';
 
 export const DashboardScreen: React.FC = () => {
   const { user } = useAuth();
@@ -55,6 +59,7 @@ export const DashboardScreen: React.FC = () => {
   const [isTimetableOpen, setIsTimetableOpen] = useState(false);
   const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   // Global Ctrl+K / Cmd+K listener and Escape to return to overview
   useEffect(() => {
@@ -84,7 +89,7 @@ export const DashboardScreen: React.FC = () => {
       if (user?.role === 'faculty') {
         setActiveSection('facultycourses');
       } else {
-        setActiveSection('attendance');
+        setActiveSection('courses');
       }
     } else {
       setActiveSection(sectionId);
@@ -97,6 +102,15 @@ export const DashboardScreen: React.FC = () => {
       // -----------------------------------------------------------------------
       // 1. STUDENT SUBPAGES
       // -----------------------------------------------------------------------
+      case 'courses':
+      case 'coursepage':
+        return (
+          <CoursesPageView
+            onBackToDashboard={() => setActiveSection('overview')}
+            onNavigateToSection={handleSelectSection}
+          />
+        );
+
       case 'attendance':
         return (
           <AttendancePageView
@@ -106,13 +120,13 @@ export const DashboardScreen: React.FC = () => {
         );
 
       case 'timetable':
-      case 'coursepage':
         return (
           <TimetablePageView
             onBackToDashboard={() => setActiveSection('overview')}
           />
         );
 
+      case 'examschedule':
       case 'marks':
       case 'grades':
       case 'gradehistory':
@@ -120,11 +134,15 @@ export const DashboardScreen: React.FC = () => {
         return (
           <MarksGradesPageView
             initialTab={
-              activeSection === 'grades'
+              activeSection === 'examschedule'
+                ? 'schedule'
+                : activeSection === 'grades'
                 ? 'grades'
                 : activeSection === 'gradehistory'
                 ? 'gradehistory'
-                : 'marks'
+                : activeSection === 'marks'
+                ? 'marks'
+                : 'schedule'
             }
             onBackToDashboard={() => setActiveSection('overview')}
           />
@@ -134,6 +152,14 @@ export const DashboardScreen: React.FC = () => {
       case 'academics':
         return (
           <AssignmentsPageView
+            onBackToDashboard={() => setActiveSection('overview')}
+          />
+        );
+
+      case 'feedback':
+      case 'studentfeedback':
+        return (
+          <StudentFeedbackPageView
             onBackToDashboard={() => setActiveSection('overview')}
           />
         );
@@ -260,6 +286,13 @@ export const DashboardScreen: React.FC = () => {
           />
         );
 
+      case 'adminfeedback':
+        return (
+          <AdminFeedbackPageView
+            onBackToDashboard={() => setActiveSection('overview')}
+          />
+        );
+
       // -----------------------------------------------------------------------
       // 4. ROLE-SPECIFIC DASHBOARD HOME VIEW
       // -----------------------------------------------------------------------
@@ -310,6 +343,7 @@ export const DashboardScreen: React.FC = () => {
         onOpenNotifications={handleNotificationsClick}
         unreadCount={user?.role === 'admin' ? 47 : user?.role === 'faculty' ? 28 : 3}
         onSelectSection={handleSelectSection}
+        onOpenQuickFeedback={() => setIsFeedbackOpen(true)}
       />
 
       {/* Main Workspace with Collapsible Sidebar Rail */}
@@ -362,6 +396,11 @@ export const DashboardScreen: React.FC = () => {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         onSelectAction={handleSelectSection}
+      />
+
+      <QuickFeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
       />
     </div>
   );

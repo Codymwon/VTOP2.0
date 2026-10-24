@@ -28,7 +28,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
         kpis={MOCK_ACADEMIC_KPIS}
         onNavigateToAttendance={() => onNavigateTo('attendance')}
         onNavigateToGrades={() => onNavigateTo('gradehistory')}
-        onNavigateToCourses={() => onNavigateTo('timetable')}
+        onNavigateToCourses={() => onNavigateTo('courses')}
       />
 
       {/* 3. Multi-Column Cockpit Layout (60% / 40%) */}
@@ -45,7 +45,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
             onOpenOuting={() => onNavigateTo('hostelouting')}
             onOpenGrades={() => onNavigateTo('grades')}
             onOpenReceipts={() => onNavigateTo('payments')}
-            onOpenCoursePage={() => onNavigateTo('timetable')}
+            onOpenCoursePage={() => onNavigateTo('courses')}
           />
         </div>
 
