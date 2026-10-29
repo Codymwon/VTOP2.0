@@ -1,4 +1,9 @@
-:80 {
+https://13.50.15.114 {
+    tls internal
+    reverse_proxy vtop-app:8080
+}
+
+http://13.50.15.114, :80 {
     reverse_proxy vtop-app:8080
 }
 
