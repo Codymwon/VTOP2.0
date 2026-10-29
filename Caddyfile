@@ -1,9 +1,5 @@
-{
-    auto_https disable_redirects
-}
-
 :443 {
-    tls internal
+    tls /etc/caddy/server.crt /etc/caddy/server.key
     reverse_proxy vtop-app:8080
 }
 
