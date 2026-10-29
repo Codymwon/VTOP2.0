@@ -12,12 +12,16 @@ RUN npm run build
 
 # 2. Install server dependencies and build backend
 WORKDIR /app/server
+COPY server/package*.json ./
 RUN npm ci
+COPY server/ ./
 RUN npx prisma generate
 RUN npm run build
 
 # 3. Production runner stage
 FROM node:20-alpine AS runner
+
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 
@@ -39,5 +43,5 @@ RUN npx prisma generate
 
 EXPOSE 8080
 
-# Run database setup & start server
-CMD ["sh", "-c", "npx prisma db push && node dist/index.js"]
+# Push database schema, seed initial accounts, and boot server
+CMD ["sh", "-c", "npx prisma db push && node prisma/seed.js && node dist/index.js"]
