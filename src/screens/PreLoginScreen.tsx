@@ -86,77 +86,67 @@ export const PreLoginScreen: React.FC = () => {
           aria-hidden="true" 
         />
         <div 
-          className="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none" 
+          className="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" 
           aria-hidden="true" 
         />
 
-        {/* Top bar inside left pane: Brand Logo */}
-        <div className="relative z-10 flex items-center justify-between mb-4 lg:mb-2">
-          <BrandLogo variant="light" size="lg" />
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-medium text-white/90 border border-white/15">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-300" aria-hidden="true" />
-            <span>VIT-AP CAS Enabled</span>
-          </div>
+        {/* Top Branding Header */}
+        <div className="relative z-10 mb-3 lg:mb-4 shrink-0">
+          <BrandLogo variant="dark" size="lg" />
         </div>
 
-        {/* Middle: Real-time Campus Notices Spotlight */}
-        <div className="relative z-10 my-auto py-2 max-w-xl">
+        {/* Center: Live Campus Spotlight & Notices */}
+        <div className="relative z-10 flex-1 my-auto flex flex-col justify-center min-h-0">
           <CampusSpotlight />
         </div>
 
-        {/* Bottom: University Accreditations */}
-        <div className="relative z-10 mt-4 lg:mt-2 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-white/70">
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-white/90">Accreditations:</span>
-            <span>NAAC A++ Grade</span>
-            <span>•</span>
-            <span>NIRF Ranked</span>
-            <span>•</span>
-            <span>ABET Accredited</span>
+        {/* Bottom Legal / Accreditation Strip */}
+        <div className="relative z-10 pt-1.5 mt-1 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-blue-200/75 font-medium shrink-0">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+            <span>ISO 9001:2015 Certified Institutional Portal</span>
           </div>
-          <div className="text-[11px] text-white/50">
-            © {new Date().getFullYear()} VIT-AP University. All rights reserved.
-          </div>
+          <span>© 2026 VIT-AP University. All Rights Reserved.</span>
         </div>
       </div>
 
-      {/* RIGHT PANE: Interactive Authentication Rail (46% on lg) */}
-      <div className="w-full lg:w-[46%] flex flex-col justify-between p-6 sm:p-8 lg:p-6 xl:p-8 bg-slate-50 lg:h-full lg:overflow-y-auto">
-        {/* Top spacer / header */}
-        <div className="flex justify-between items-center mb-3">
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            Enterprise Single Sign-On
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-            <span>Gateway Online</span>
-          </div>
+      {/* RIGHT PANE: Unified Authentication Gateway (46% on lg) */}
+      <div className="w-full lg:w-[46%] flex flex-col justify-between p-4 sm:p-6 lg:p-4 xl:p-6 bg-[#F4F6F9] lg:h-full lg:overflow-hidden">
+        {/* Mobile-only header view */}
+        <div className="lg:hidden flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
+          <BrandLogo variant="light" size="sm" />
+          <span className="text-xs font-bold text-[#176CB8] bg-[#176CB8]/10 px-2.5 py-1 rounded-full border border-[#176CB8]/20">
+            Auth Gateway
+          </span>
         </div>
 
-        {/* Centered Auth Box */}
-        <div className="max-w-md w-full mx-auto my-auto py-2">
-          {/* Main Card */}
+        {/* Main Authentication Card */}
+        <div className="w-full max-w-md mx-auto my-auto py-1 sm:py-2">
           <div
             id="auth-card"
             tabIndex={-1}
-            className="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/90 focus:outline-none"
+            className="bg-white rounded-3xl p-5 sm:p-6 lg:p-6 shadow-xl shadow-slate-300/40 border border-slate-200/90 relative focus:outline-none"
           >
-            {/* Title & subtitle */}
-            <div className="mb-4">
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">
-                Sign in to VTOP Portal
-              </h1>
-              <p className="text-xs text-slate-500 mt-1">
-                Select your institutional role and enter credentials to continue.
+            {/* Card Header */}
+            <div className="mb-3.5 text-center sm:text-left">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                Sign In to VTOP
+              </h2>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Welcome back! Select your role and provide your institutional credentials to proceed.
               </p>
             </div>
 
-            {/* Role Switcher Component */}
-            <div className="mb-4">
-              <RoleSwitcher role={role} onChange={setRole} />
+            {/* Role Switcher */}
+            <div className="mb-3.5">
+              <RoleSwitcher
+                role={role}
+                onChange={(newRole) => setRole(newRole)}
+                disabled={isSubmitting}
+              />
             </div>
 
-            {/* Form Component */}
+            {/* Authentication Form */}
             <AuthForm
               role={role}
               onSubmit={handleLoginSubmit}
@@ -164,7 +154,7 @@ export const PreLoginScreen: React.FC = () => {
               isLoading={isSubmitting}
             />
 
-            {/* Mobile App Download Promotion Banner */}
+            {/* Mobile App Download Integration */}
             <div className="mt-4 pt-3.5 border-t border-slate-100">
               <MobileAppBadges />
             </div>
