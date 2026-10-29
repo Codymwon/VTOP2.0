@@ -16,7 +16,6 @@ import {
   Download,
   Clock,
   MapPin,
-  FileText,
 } from 'lucide-react';
 
 interface MarksGradesPageViewProps {
@@ -101,19 +100,14 @@ export const MarksGradesPageView: React.FC<MarksGradesPageViewProps> = ({
         onBackToDashboard={onBackToDashboard}
         onPrint={() => window.print()}
         extraActions={
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => alert('Downloading official Verified Examination Hall Ticket for Fall 2026-27 (PDF)...')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] rounded-xl text-xs font-bold text-white bg-[#176CB8] hover:bg-[#135796] shadow-xs transition-colors cursor-pointer"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download Hall Ticket</span>
-            </button>
-            <span className="text-xs font-mono font-bold bg-blue-50 text-[#176CB8] border border-blue-200 px-3 py-1.5 rounded-xl">
-              CGPA: {MOCK_ACADEMIC_KPIS.cgpa} · 134.0 Credits
-            </span>
-          </div>
+          <button
+            type="button"
+            onClick={() => alert('Downloading official Verified Examination Hall Ticket for Fall 2026-27 (PDF)...')}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] rounded-xl text-xs font-bold text-white bg-[#176CB8] hover:bg-[#135796] shadow-xs transition-colors cursor-pointer"
+          >
+            <Download className="w-4 h-4" />
+            <span>Download Hall Ticket</span>
+          </button>
         }
       />
 
@@ -223,39 +217,6 @@ export const MarksGradesPageView: React.FC<MarksGradesPageViewProps> = ({
       {/* ========================================================================= */}
       {activeTab === 'schedule' && (
         <div className="space-y-4">
-          {/* Hall Ticket Advisory Banner */}
-          <div className="bg-gradient-to-r from-blue-50/80 via-white to-blue-50/80 border border-blue-200/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#176CB8] text-white flex items-center justify-center shrink-0 mt-0.5">
-                <FileText className="w-5 h-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Fall Semester 2026-27 Continuous Assessment Test 1 (CAT-1)
-                  </h3>
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                    Fee Cleared
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
-                  Hall Ticket generated for <strong>ARJUN K SHARMA (23BCE1088)</strong>. Students must present their physical or digital biometric ID card at the examination hall <strong>30 minutes</strong> prior to commencement.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => alert('Downloading official Verified CAT-1 Hall Ticket with Biometric QR...')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#176CB8] hover:bg-[#135796] rounded-xl shadow-xs transition-colors cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Print Hall Ticket</span>
-              </button>
-            </div>
-          </div>
-
           {/* Filter Bar */}
           <div className="bg-white border border-slate-200/80 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 shadow-xs">
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -605,21 +566,6 @@ export const MarksGradesPageView: React.FC<MarksGradesPageViewProps> = ({
                       ))}
                     </tbody>
                   </table>
-                </div>
-              </div>
-
-              {/* Bottom Summary Box matching Prototype Page 15 */}
-              <div className="flex justify-end">
-                <div className="bg-white border border-slate-200/80 rounded-2xl p-3 px-5 shadow-xs flex items-center gap-6">
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Semester GPA</span>
-                    <strong className="text-xl font-black font-mono text-emerald-700">8.42</strong>
-                  </div>
-                  <div className="h-7 w-px bg-slate-200" />
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Credits Cleared</span>
-                    <strong className="text-xl font-black font-mono text-slate-900">17.0</strong>
-                  </div>
                 </div>
               </div>
             </>

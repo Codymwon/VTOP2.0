@@ -336,48 +336,36 @@ export const MOCK_ADMIN_USER_DIRECTORY: UserDirectoryItem[] = [
 
 export const MOCK_ADMIN_NAV_CATEGORIES: NavCategory[] = [
   {
-    id: 'operations',
+    id: 'adminouting',
     label: 'Hostel & Security Desk',
     iconName: 'Building2',
     badge: '47 Pending',
-    items: [
-      { id: 'adminouting', label: 'Outing & Leave Desk', href: '#adminouting', badge: '47' },
-      { id: 'admingate', label: 'Biometric Turnstiles', href: '#admingate' },
-    ],
+    items: [],
   },
   {
-    id: 'academics',
+    id: 'adminacademics',
     label: 'Academic Operations',
     iconName: 'BookOpen',
     badge: '92% Utilized',
-    items: [
-      { id: 'adminacademics', label: 'Space & Scheduling Audit', href: '#adminacademics' },
-    ],
+    items: [],
   },
   {
-    id: 'finance',
+    id: 'adminfinance',
     label: 'Financial Governance',
     iconName: 'CreditCard',
     badge: '18 Clearances',
-    items: [
-      { id: 'adminfinance', label: 'Fee & Clearance Audit', href: '#adminfinance', badge: '18' },
-    ],
+    items: [],
   },
   {
-    id: 'communications',
+    id: 'admincirculars',
     label: 'Broadcast & Media',
     iconName: 'Award',
-    items: [
-      { id: 'admincirculars', label: 'Circulars & Spotlight', href: '#admincirculars' },
-    ],
+    items: [],
   },
   {
-    id: 'directory',
-    label: 'Institutional Registry',
+    id: 'adminusers',
+    label: 'User & Biometric Directory',
     iconName: 'UserCheck',
-    items: [
-      { id: 'adminusers', label: 'User & Biometric Directory', href: '#adminusers' },
-      { id: 'adminfeedback', label: 'Portal UI Feedback & Telemetry', href: '#adminfeedback', badge: '4 New' },
-    ],
+    items: [],
   },
 ];

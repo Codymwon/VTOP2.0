@@ -183,7 +183,7 @@ export interface NavCategory {
   label: string;
   iconName: string;
   badge?: string;
-  items: {
+  items?: {
     id: string;
     label: string;
     href?: string;

@@ -8,8 +8,6 @@ import { MOCK_FACULTY_NAV_CATEGORIES } from '../services/mockFacultyService';
 import { MOCK_ADMIN_NAV_CATEGORIES } from '../services/mockAdminService';
 import { TopNavbar } from '../components/dashboard/TopNavbar';
 import { SidebarNav } from '../components/dashboard/SidebarNav';
-import { TimetableModal } from '../components/dashboard/TimetableModal';
-import { AttendanceModal } from '../components/dashboard/AttendanceModal';
 import { GlobalSearchModal } from '../components/dashboard/GlobalSearchModal';
 import { useAuth } from '../context/AuthContext';
 
@@ -56,8 +54,6 @@ export const DashboardScreen: React.FC = () => {
   const [activeSection, setActiveSection] = useState('overview');
 
   // Modals state
-  const [isTimetableOpen, setIsTimetableOpen] = useState(false);
-  const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
@@ -67,13 +63,13 @@ export const DashboardScreen: React.FC = () => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
-      } else if (e.key === 'Escape' && activeSection !== 'overview' && !isSearchOpen && !isTimetableOpen && !isAttendanceOpen) {
+      } else if (e.key === 'Escape' && activeSection !== 'overview' && !isSearchOpen) {
         setActiveSection('overview');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSection, isSearchOpen, isTimetableOpen, isAttendanceOpen]);
+  }, [activeSection, isSearchOpen]);
 
   // Dynamically resolve navigation categories based on active role
   const navCategories =
@@ -382,20 +378,12 @@ export const DashboardScreen: React.FC = () => {
       </div>
 
       {/* Accessible Global Modals */}
-      <TimetableModal
-        isOpen={isTimetableOpen}
-        onClose={() => setIsTimetableOpen(false)}
-      />
-
-      <AttendanceModal
-        isOpen={isAttendanceOpen}
-        onClose={() => setIsAttendanceOpen(false)}
-      />
 
       <GlobalSearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         onSelectAction={handleSelectSection}
+        categories={navCategories}
       />
 
       <QuickFeedbackModal

@@ -10,8 +10,6 @@ import {
   FileText,
   Download,
   X,
-  Info,
-  ShieldCheck,
   FileDown,
   ArrowLeft,
   ChevronRight,
@@ -148,38 +146,6 @@ export const AssignmentsPageView: React.FC<AssignmentsPageViewProps> = ({
         }
       />
 
-      {/* Institutional Guidelines Alert */}
-      <div className="bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#176CB8] text-white flex items-center justify-center shrink-0 mt-0.5">
-            <Info className="w-5 h-5" aria-hidden="true" />
-          </div>
-          <div className="space-y-1">
-            <h3 className="text-sm font-bold text-slate-900">
-              Institutional Submission Guidelines (Fall Semester 2026-27)
-            </h3>
-            <p className="text-xs text-slate-600 max-w-3xl leading-relaxed">
-              Submissions must be in <strong>PDF</strong> or <strong>DOCX</strong> format (Max file size: <strong>4.0 MB</strong>). Ensure your <strong>Register Number (23BCE1088)</strong> and <strong>Name</strong> are included as headers or via the <strong>Official Cover Sheet</strong> on the first page.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={() => handleOpenCoverSheet(selectedCourseCode || 'CSE4012')}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-[#176CB8] bg-white border border-blue-200 rounded-xl hover:bg-blue-50 shadow-2xs transition-colors cursor-pointer"
-          >
-            <FileDown className="w-4 h-4" />
-            <span>Generate Cover Sheet</span>
-          </button>
-          <div className="hidden lg:flex items-center gap-1 text-xs text-slate-600 font-mono">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
-            <span>Integrity Protected</span>
-          </div>
-        </div>
-      </div>
-
       {/* ========================================================================= */}
       {/* VIEW 1: PROTOTYPE PAGE 6 - COURSE DIRECTORY OVERVIEW                      */}
       {/* ========================================================================= */}
@@ -293,15 +259,6 @@ export const AssignmentsPageView: React.FC<AssignmentsPageViewProps> = ({
                 </p>
               </div>
             </div>
-
-            <button
-              type="button"
-              onClick={() => handleOpenCoverSheet(selectedCourseCode)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] text-xs font-bold text-[#176CB8] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition-colors cursor-pointer self-start md:self-auto"
-            >
-              <FileDown className="w-3.5 h-3.5" />
-              <span>Download {selectedCourseCode} Cover Sheet</span>
-            </button>
           </div>
 
           {/* Status Filter for current course */}

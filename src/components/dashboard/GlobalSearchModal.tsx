@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, ArrowRight } from 'lucide-react';
 import { MOCK_ATTENDANCE_RECORDS, MOCK_NAV_CATEGORIES } from '../../services/mockDashboardService';
+import { NavCategory } from '../../types/dashboard';
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectAction: (id: string) => void;
+  categories?: NavCategory[];
 }
 
 export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   isOpen,
   onClose,
   onSelectAction,
+  categories,
 }) => {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -50,8 +53,11 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   );
 
   // Search through nav items
-  const allNavItems = MOCK_NAV_CATEGORIES.flatMap((c) =>
-    c.items.map((item) => ({ ...item, category: c.label }))
+  const navSource = categories && categories.length > 0 ? categories : MOCK_NAV_CATEGORIES;
+  const allNavItems = navSource.flatMap((c) =>
+    c.items && c.items.length > 0
+      ? c.items.map((item) => ({ ...item, category: c.label }))
+      : [{ id: c.id, label: c.label, href: `#${c.id}`, category: c.label }]
   );
   const filteredNav = allNavItems.filter(
     (n) => n.label.toLowerCase().includes(cleanQuery) || n.category.toLowerCase().includes(cleanQuery)

@@ -335,31 +335,18 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({ onNaviga
         {/* Left Column (8 cols): Hostel Outing Approval Desk (Interactive Queue) */}
         <div className="lg:col-span-8 space-y-4">
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Hostel Outing Approval Desk (Live Queue)
-                  </h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                    {outingRequests.filter((r) => r.status === 'Pending Review').length} Pending
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Single-click verification for weekend and general gate passes. Instant biometric synchronization.
-                </p>
+            <div className="pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-900">
+                  Hostel Outing Approval Desk (Live Queue)
+                </h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                  {outingRequests.filter((r) => r.status === 'Pending Review').length} Pending
+                </span>
               </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleBatchApproveVerified}
-                  className="px-3 py-2 min-h-[44px] rounded-lg bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
-                >
-                  <CheckCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>Batch Approve Verified</span>
-                </button>
-              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Single-click verification for weekend and general gate passes. Instant biometric synchronization.
+              </p>
             </div>
 
             {/* Outing Requests Table */}

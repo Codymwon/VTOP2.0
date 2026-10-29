@@ -91,25 +91,17 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
   const { user } = useAuth();
   // Category headings are collapsed by default to keep the sidebar compact and clean
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {
-      academics: false,
-      examinations: false,
-      hostel: false,
-      payments: false,
-      profile: false,
-      evaluation: false,
-      mentorship: false,
-      administration: false,
-      operations: false,
-      finance: false,
-      communications: false,
-      directory: false,
-    };
+    const initial: Record<string, boolean> = {};
+    categories.forEach((cat) => {
+      initial[cat.id] = false;
+    });
     if (activeSection && activeSection !== 'overview') {
       const parentCat = categories.find(
-        (cat) => cat.id === activeSection || cat.items.some((item) => item.id === activeSection)
+        (cat) =>
+          cat.id === activeSection ||
+          Boolean(cat.items && cat.items.some((item) => item.id === activeSection))
       );
-      if (parentCat) {
+      if (parentCat && parentCat.items && parentCat.items.length > 0) {
         initial[parentCat.id] = true;
       }
     }
@@ -120,9 +112,11 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
   useEffect(() => {
     if (activeSection === 'overview') return;
     const parentCat = categories.find(
-      (cat) => cat.id === activeSection || cat.items.some((item) => item.id === activeSection)
+      (cat) =>
+        cat.id === activeSection ||
+        Boolean(cat.items && cat.items.some((item) => item.id === activeSection))
     );
-    if (parentCat) {
+    if (parentCat && parentCat.items && parentCat.items.length > 0) {
       setExpandedCategories((prev) => ({
         ...prev,
         [parentCat.id]: true,
@@ -191,9 +185,82 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
         <div className="space-y-0.5">
           {categories.map((cat) => {
             const IconComponent = CATEGORY_ICON_MAP[cat.iconName] || BookOpen;
-            const isExpanded = !!expandedCategories[cat.id];
+            const hasItems = Boolean(cat.items && cat.items.length > 0);
+            const isExpanded = hasItems && !!expandedCategories[cat.id];
+
+            const isCatActive =
+              activeSection === cat.id ||
+              (cat.id === 'examinations' &&
+                ['examinations', 'examschedule', 'marks', 'grades', 'gradehistory'].includes(activeSection)) ||
+              (cat.id === 'hostel' &&
+                ['hostel', 'hostelouting', 'hostelroom', 'weekendouting', 'generalouting', 'biometric', 'mentor', 'roominfo', 'room'].includes(activeSection)) ||
+              (cat.id === 'payments' &&
+                ['payments', 'receipts', 'onlinepayments', 'bonafide', 'transcript', 'bankinfo'].includes(activeSection)) ||
+              (cat.id === 'studentprofile' &&
+                ['studentprofile', 'profile', 'biodata'].includes(activeSection)) ||
+              (cat.id === 'adminouting' &&
+                ['adminouting', 'admingate', 'operations'].includes(activeSection)) ||
+              (cat.id === 'adminacademics' &&
+                ['adminacademics', 'academics'].includes(activeSection)) ||
+              (cat.id === 'adminfinance' &&
+                ['adminfinance', 'finance'].includes(activeSection)) ||
+              (cat.id === 'admincirculars' &&
+                ['admincirculars', 'communications'].includes(activeSection)) ||
+              (cat.id === 'adminusers' &&
+                ['adminusers', 'directory'].includes(activeSection)) ||
+              (cat.id === 'facultygrading' &&
+                ['facultygrading', 'evaluation'].includes(activeSection)) ||
+              (cat.id === 'facultyproctor' &&
+                ['facultyproctor', 'mentorship'].includes(activeSection)) ||
+              (cat.id === 'facultyduties' &&
+                ['facultyduties', 'administration'].includes(activeSection));
+
             const hasActiveChild =
-              activeSection === cat.id || cat.items.some((item) => item.id === activeSection);
+              isCatActive || (hasItems && (cat.items?.some((item) => item.id === activeSection) ?? false));
+
+            if (!hasItems) {
+              return (
+                <div key={cat.id}>
+                  <button
+                    type="button"
+                    onClick={() => handleItemClick(cat.id)}
+                    aria-current={isCatActive ? 'page' : undefined}
+                    className={`w-full flex items-center justify-between px-2.5 py-2 min-h-[44px] text-left rounded-lg transition-all active:scale-[0.98] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-[#176CB8] ${
+                      isCatActive
+                        ? 'bg-[#183668] text-white font-bold shadow-xs'
+                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100/70 font-semibold'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${
+                          isCatActive
+                            ? 'bg-white/20 text-white'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        <IconComponent className="w-3 h-3" aria-hidden="true" />
+                      </div>
+                      <span className="text-[11px] font-bold tracking-tight truncate">
+                        {cat.label}
+                      </span>
+                    </div>
+
+                    {cat.badge && (
+                      <span
+                        className={`text-[9px] font-bold px-1 py-0.5 rounded border tabular-nums ${
+                          isCatActive
+                            ? 'text-white/90 bg-white/10 border-white/20'
+                            : 'text-slate-600 bg-slate-100 border-slate-200/60'
+                        }`}
+                      >
+                        {cat.badge}
+                      </span>
+                    )}
+                  </button>
+                </div>
+              );
+            }
 
             return (
               <div key={cat.id} className="space-y-0.5">
@@ -239,7 +306,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
                 </button>
 
                 {/* Direct 1-Tap Sub-item Links */}
-                {isExpanded && (
+                {isExpanded && cat.items && (
                   <div className="pl-2.5 pr-0.5 space-y-0.5 border-l border-slate-100 ml-3 py-0.5 animate-in fade-in duration-100">
                     {cat.items.map((item) => {
                       const SubIcon = SUB_ITEM_ICONS[item.id] || FileText;

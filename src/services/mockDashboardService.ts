@@ -665,36 +665,24 @@ export const MOCK_NAV_CATEGORIES: NavCategory[] = [
     id: 'examinations',
     label: 'Examinations',
     iconName: 'GraduationCap',
-    items: [
-      { id: 'examschedule', label: 'Exam Schedule & Hall Ticket', href: '#examschedule' },
-      { id: 'marks', label: 'Continuous Assessment Marks', href: '#marks' },
-      { id: 'grades', label: 'Semester Grades & CGPA', href: '#grades' },
-    ],
+    items: [],
   },
   {
     id: 'hostel',
     label: 'Campus & Hostel',
     iconName: 'Building2',
-    items: [
-      { id: 'hostelouting', label: 'Hostel Outing & Gate Pass', href: '#hostelouting' },
-      { id: 'hostelroom', label: 'Hostel Room & Residence', href: '#hostelroom' },
-    ],
+    items: [],
   },
   {
     id: 'payments',
     label: 'Finance & Services',
     iconName: 'CreditCard',
-    items: [
-      { id: 'payments', label: 'Fee Payments & Receipts', href: '#payments' },
-    ],
+    items: [],
   },
   {
-    id: 'profile',
-    label: 'My Account',
+    id: 'studentprofile',
+    label: 'Student Profile & Bio',
     iconName: 'UserCheck',
-    items: [
-      { id: 'studentprofile', label: 'Student Profile & Bio', href: '#studentprofile' },
-      { id: 'feedback', label: 'Portal UI Feedback', href: '#feedback' },
-    ],
+    items: [],
   },
 ];

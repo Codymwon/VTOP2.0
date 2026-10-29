@@ -391,29 +391,23 @@ export const MOCK_FACULTY_NAV_CATEGORIES: NavCategory[] = [
     ],
   },
   {
-    id: 'evaluation',
-    label: 'Evaluations',
+    id: 'facultygrading',
+    label: 'Evaluations & Grading',
     iconName: 'GraduationCap',
     badge: '28 Pending',
-    items: [
-      { id: 'facultygrading', label: 'Evaluation & Grading', href: '#facultygrading', badge: '28' },
-    ],
+    items: [],
   },
   {
-    id: 'mentorship',
+    id: 'facultyproctor',
     label: 'Student Mentorship',
     iconName: 'UserCheck',
     badge: '2 Alerts',
-    items: [
-      { id: 'facultyproctor', label: 'Proctoree Roster', href: '#facultyproctor', badge: '2 Req' },
-    ],
+    items: [],
   },
   {
-    id: 'administration',
-    label: 'Faculty Services',
+    id: 'facultyduties',
+    label: 'Faculty Services & Duties',
     iconName: 'Building2',
-    items: [
-      { id: 'facultyduties', label: 'Duties & Invigilation', href: '#facultyduties', badge: '1 Duty' },
-    ],
+    items: [],
   },
 ];
