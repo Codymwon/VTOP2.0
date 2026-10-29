@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String          @id // e.g. "23MIC7209", "EMP10245", "ADM1001"
+  username     String          @unique
+  passwordHash String
+  name         String
+  email        String          @unique
+  phone        String?
+  role         String          // "student" | "faculty" | "admin"
+  campus       String          @default("VIT-AP University, Amaravati")
+  school       String?
+  program      String?
+  semester     String?
+  designation  String?
+  department   String?
+  avatarUrl    String?
+  createdAt    DateTime        @default(now())
+
+  otpSessions  OtpSession[]
+  profile      StudentProfile?
+}
+
+model OtpSession {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  otpCode           String
+  otpChannel        String   @default("EMAIL") // "EMAIL" | "SMS"
+  otpDestination    String?
+  expiresAt         DateTime
+  attemptsRemaining Int      @default(4)
+  isVerified        Boolean  @default(false)
+  lastResentAt      DateTime @default(now())
+}
+
+model StudentProfile {
+  id             String  @id @default(uuid())
+  studentId      String  @unique
+  user           User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  applicationNo  String
+  dob            String
+  gender         String
+  bloodGroup     String
+  nativeLanguage String
+  nativeState    String
+  degree         String
+  admissionYear  Int
+  isHosteller    Boolean @default(true)
+  hostelBlock    String?
+  roomNo         String?
+  addressJson    String  // JSON: street, area, city, state, pincode, country
+  educationJson  String  // JSON: schoolName, board, qualification, percentage, yearOfPassing
+}
+
+model AcademicKPI {
+  id                          String @id @default(uuid())
+  studentId                   String @unique
+  overallAttendancePercentage Float  @default(89.5)
+  totalAttendedClasses        Int    @default(129)
+  totalConductedClasses       Int    @default(143)
+  debarSafetyStatus           String @default("safe")
+  cgpa                        Float  @default(8.38)
+  totalEarnedCredits          Float  @default(134.0)
+  currentSemesterCredits      Float  @default(21.0)
+  enrolledSubjectsCount       Int    @default(6)
+  enrolledComponentsCount     Int    @default(8)
+}
+
+model Course {
+  id          String  @id @default(uuid())
+  code        String  @unique // e.g. "CSE4012"
+  title       String
+  courseType  String  // "Embedded Theory", "Theory", "Lab"
+  credits     Float
+  slot        String
+  room        String
+  facultyId   String?
+  facultyName String?
+}
+
+model Enrollment {
+  id                   String  @id @default(uuid())
+  studentId            String
+  courseCode           String
+  courseTitle          String
+  courseType           String
+  credits              Float
+  slot                 String
+  facultyName          String
+  attendedClasses      Int     @default(0)
+  totalClasses         Int     @default(0)
+  attendancePercentage Float   @default(100.0)
+  debarSafety          String  @default("safe")
+}
+
+model AttendanceDayLog {
+  id         String  @id @default(uuid())
+  studentId  String
+  courseCode String
+  slNo       Int
+  date       String
+  slot       String
+  dayTime    String
+  status     String  // "Present", "Absent", "On-Duty"
+  remark     String?
+}
+
+model TimetableSlot {
+  id          String @id @default(uuid())
+  userId      String
+  dayOfWeek   String
+  courseCode  String
+  courseTitle String
+  slotName    String
+  startTime   String
+  endTime     String
+  room        String
+  status      String @default("upcoming") // "ongoing", "completed", "upcoming"
+}
+
+model Assignment {
+  id                 String  @id @default(uuid())
+  studentId          String
+  courseCode         String
+  courseTitle        String
+  title              String
+  description        String?
+  dueDate            String
+  status             String  // "Pending", "Submitted", "Evaluated"
+  submissionDate     String?
+  submissionFileName String?
+  maxMarks           Float   @default(100)
+  scoredMarks        Float?
+  facultyRemarks     String?
+}
+
+model MarkItem {
+  id             String @id @default(uuid())
+  studentId      String
+  courseCode     String
+  courseTitle    String
+  assessmentType String // "CAT-1", "CAT-2", "DA-1", "FAT"
+  maxMarks       Float
+  weightage      Float
+  scoredMarks    Float
+  classAverage   Float?
+}
+
+model GradeHistory {
+  id             String @id @default(uuid())
+  studentId      String
+  courseCode     String
+  courseTitle    String
+  credits        Float
+  grade          String
+  semester       String
+  examMonthYear  String
+}
+
+model HostelOuting {
+  id                    String  @id @default(uuid())
+  studentId             String
+  studentName           String
+  gender                String
+  hostelBlock           String
+  roomNo                String
+  outingType            String  // "Weekend Outing", "General Leave"
+  placeOfVisit          String
+  fromDate              String
+  toDate                String
+  purpose               String
+  parentConsentVerified Boolean @default(true)
+  parentPhone           String
+  mentorApproved        Boolean @default(true)
+  mentorName            String
+  adminStatus           String  @default("Pending Review") // "Pending Review", "Approved", "Rejected"
+  gatePassCode          String?
+  requestedAt           String
+}
+
+model PaymentRecord {
+  id            String @id @default(uuid())
+  studentId     String
+  refNo         String @unique
+  feeType       String
+  semester      String
+  amount        Float
+  paymentDate   String
+  paymentMode   String
+  status        String // "Paid", "Pending", "Overdue"
+  receiptNumber String
+}
+
+model EmergencyCircular {
+  id       String  @id @default(uuid())
+  title    String
+  tag      String  // "Urgent", "Academic", "General", "Alumni"
+  date     String
+  content  String
+  priority String  @default("normal")
+  issuedBy String
+  active   Boolean @default(true)
+}
+
+model GatePassSwipe {
+  id           String  @id @default(uuid())
+  studentRegNo String
+  studentName  String
+  hostelBlock  String
+  swipeTime    String
+  gateName     String
+  direction    String  // "OUT", "IN"
+  status       String  // "Authorized", "Unauthorized"
+  passId       String?
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  userId    String
+  category  String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+}
+
+model FacultyAdvisee {
+  id                   String  @id @default(uuid())
+  facultyId            String
+  studentRegNo         String
+  studentName          String
+  program              String
+  cgpa                 Float
+  attendancePercentage Float
+  pendingOutingPass    Boolean @default(false)
+  outingDetails        String?
+}
+
+model FacultyGradingItem {
+  id              String  @id @default(uuid())
+  facultyId       String
+  courseCode      String
+  courseTitle     String
+  assignmentTitle String
+  studentRegNo    String
+  studentName     String
+  submittedAt     String
+  maxMarks        Float
+  scoredMarks     Float?
+  feedback        String?
+  status          String  @default("Pending")
+}
+
+model FacultyDutyLeave {
+  id        String @id @default(uuid())
+  facultyId String
+  leaveType String
+  fromDate  String
+  toDate    String
+  reason    String
+  status    String // "Approved", "Pending", "Rejected"
+}

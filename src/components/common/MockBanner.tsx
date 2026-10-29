@@ -13,7 +13,7 @@ export const MockBanner: React.FC = () => {
         <div className="flex items-center gap-2.5">
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold tracking-wide">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>{apiMode === 'mock' ? 'Offline Demo Mock Layer' : 'Live Rust Backend Bridge'}</span>
+            <span>{apiMode === 'mock' ? 'Offline Demo Mock Layer' : 'Live Node.js API & Mailer Gateway'}</span>
           </div>
 
           <span className="hidden sm:inline text-slate-400">|</span>

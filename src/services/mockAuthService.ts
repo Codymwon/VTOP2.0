@@ -17,21 +17,19 @@ class MockAuthService {
   private lastResendTimestamp: number = 0;
   private pendingUser: UserProfile | null = null;
   private maxAttempts = 4;
-  private cooldownDuration = 180; // 3 minutes matching Rust backend
+  private cooldownDuration = 180;
 
-  // Helper to toggle OTP simulation on/off for testing convenience
   public setSimulateOtp(enabled: boolean) {
     localStorage.setItem(OTP_SIMULATION_FLAG_KEY, enabled ? 'true' : 'false');
   }
 
   public shouldSimulateOtp(): boolean {
     const val = localStorage.getItem(OTP_SIMULATION_FLAG_KEY);
-    return val === null ? true : val === 'true'; // Default true for demonstration of 2FA flow
+    return val === null ? true : val === 'true';
   }
 
   public async login(credentials: LoginCredentials): Promise<LoginResult> {
-    // Artificial realistic network delay (500ms)
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 400));
 
     const username = credentials.username.trim().toUpperCase();
     const password = credentials.password;
@@ -43,80 +41,106 @@ class MockAuthService {
       };
     }
 
-    // Determine target profile
     let user: UserProfile;
     if (credentials.role === 'student') {
       user = {
-        id: username.startsWith('2') ? username : '23BCE1088',
-        name: 'Arjun K Sharma',
-        email: `${username.toLowerCase()}@vitap.ac.in`,
+        id: username.startsWith('2') ? username : '23MIC7209',
+        name: 'Akarsh',
+        email: 'akarsh.23mic7209@vitapstudent.ac.in',
+        phone: '+91 98401 23456',
         role: 'student',
         school: 'School of Computer Science & Engineering (SCOPE)',
-        program: 'B.Tech Computer Science and Engineering',
+        program: 'Integrated M.Tech - Computer Science and Engineering',
         semester: 'Fall Semester 2026-27',
         campus: 'VIT-AP University, Amaravati',
-        avatarUrl: undefined,
       };
+
+      if (credentials.targetEmail && !credentials.targetEmail.toLowerCase().endsWith('@vitapstudent.ac.in')) {
+        return {
+          status: 'INVALID_CREDENTIALS',
+          message: 'Student institutional email must end with @vitapstudent.ac.in',
+        };
+      }
     } else if (credentials.role === 'faculty') {
       user = {
         id: username.startsWith('EMP') ? username : 'EMP10245',
         name: 'Dr. Hussain Syed',
-        email: `${username.toLowerCase()}@vitap.ac.in`,
+        email: 'hussain.syed@vitap.ac.in',
+        phone: '+91 94432 10987',
         role: 'faculty',
         department: 'Department of Software and Systems Engineering',
         designation: 'Professor & Head of UI/UX Research Lab',
         campus: 'VIT-AP University, Amaravati',
       };
+
+      if (credentials.targetEmail && !credentials.targetEmail.toLowerCase().endsWith('@vitap.ac.in')) {
+        return {
+          status: 'INVALID_CREDENTIALS',
+          message: 'Faculty institutional email must end with @vitap.ac.in',
+        };
+      }
     } else {
       user = {
         id: username.startsWith('ADM') ? username : 'ADM1001',
         name: 'Dr. S. K. Narayanan',
-        email: `${username.toLowerCase()}@vitap.ac.in`,
+        email: 'sk.narayanan@vitap.ac.in',
+        phone: '+91 98765 43210',
         role: 'admin',
-        department: 'Office of the Registrar & Central Operations',
+        department: 'Office of Academic Administration & Security Operations',
         designation: 'Chief Administrative Officer & Registrar',
         campus: 'VIT-AP University, Amaravati',
       };
     }
 
-    // Check if test password is valid
-    // For ease of evaluation, allow "password123", "vitap", or any password of length >= 6
-    if (password.length < 4) {
-      return {
-        status: 'INVALID_CREDENTIALS',
-        message: 'Invalid credentials. Password must be at least 4 characters.',
-      };
+    const channel = (credentials.deliveryMethod === 'sms' || credentials.targetPhone) ? 'SMS' : 'EMAIL';
+
+    // Verify phone if SMS
+    if (channel === 'SMS' && credentials.targetPhone) {
+      const entered = credentials.targetPhone.replace(/[\s\-\(\)]/g, '');
+      const registered = (user.phone || '').replace(/[\s\-\(\)]/g, '');
+      if (entered !== registered && !registered.endsWith(entered)) {
+        return {
+          status: 'INVALID_CREDENTIALS',
+          message: 'Entered mobile number does not match your registered institutional number on record.',
+        };
+      }
     }
 
-    // Check if OTP simulation is required
     if (this.shouldSimulateOtp()) {
-      this.pendingUser = user;
-      this.activeOtp = '123456'; // Standard mock OTP, easy to type and test
-      this.otpExpiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+      const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      this.activeOtp = generatedOtp;
+      this.otpExpiresAt = Date.now() + 10 * 60 * 1000;
       this.otpAttempts = 0;
       this.lastResendTimestamp = Date.now();
+      this.pendingUser = user;
 
-      const maskedEmail = user.email.replace(/(.{2})(.*)(?=@)/, (_gp1, h, t) => h + '*'.repeat(t.length));
+      const masked = channel === 'EMAIL'
+        ? `${user.email.slice(0, 3)}***@${user.email.split('@')[1]}`
+        : `${user.phone?.slice(0, 3)}******${user.phone?.slice(-4)}`;
 
       return {
         status: 'OTP_REQUIRED',
-        message: `Security OTP sent to your registered institutional email.`,
-        otpEmailMasked: maskedEmail,
+        message: channel === 'EMAIL'
+          ? `Security OTP sent to registered institutional email.`
+          : `Security OTP sent via SMS to registered mobile number.`,
+        channel,
+        otpEmailMasked: masked,
+        destinationMasked: masked,
         cooldownSeconds: this.cooldownDuration,
+        devOtpHint: generatedOtp,
       };
     }
 
-    // Direct Login Path (Known device / trusted IP)
     const session = this.createSession(user);
     return {
       status: 'SUCCESS',
-      message: 'Authentication successful. Redirecting to your dashboard...',
+      message: 'Authentication successful.',
       session,
     };
   }
 
   public async verifyOtp(otp: string): Promise<VerifyOtpResult> {
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     if (!this.pendingUser) {
       return {
@@ -134,15 +158,13 @@ class MockAuthService {
 
     this.otpAttempts += 1;
 
-    // Accept either the generated mock OTP or '123456'
     if (otp === this.activeOtp || otp === '123456') {
       const session = this.createSession(this.pendingUser);
       this.pendingUser = null;
       this.activeOtp = null;
-      this.otpAttempts = 0;
       return {
         status: 'SUCCESS',
-        message: 'OTP verified successfully.',
+        message: 'Security credentials verified successfully.',
         session,
       };
     }
@@ -153,42 +175,40 @@ class MockAuthService {
       this.activeOtp = null;
       return {
         status: 'MAX_ATTEMPTS_EXCEEDED',
-        message: 'Maximum verification attempts (4) exceeded. Login session terminated for security.',
+        message: 'Maximum verification attempts exceeded. Account locked for 15 minutes.',
         attemptsRemaining: 0,
       };
     }
 
     return {
       status: 'INVALID_OTP',
-      message: `Incorrect OTP. Please check your email and try again.`,
+      message: 'Incorrect security OTP.',
       attemptsRemaining,
     };
   }
 
   public async resendOtp(): Promise<ResendOtpResult> {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    const now = Date.now();
-    const elapsedSeconds = Math.floor((now - this.lastResendTimestamp) / 1000);
+    const elapsedSeconds = Math.floor((Date.now() - this.lastResendTimestamp) / 1000);
 
     if (elapsedSeconds < this.cooldownDuration) {
       return {
         status: 'COOLDOWN_ACTIVE',
-        message: `Please wait before requesting another OTP.`,
+        message: `Please wait before requesting a new OTP.`,
         cooldownSeconds: this.cooldownDuration - elapsedSeconds,
       };
     }
 
-    // Refresh OTP
-    this.activeOtp = '123456';
-    this.otpExpiresAt = now + 10 * 60 * 1000;
-    this.lastResendTimestamp = now;
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    this.activeOtp = generatedOtp;
+    this.otpExpiresAt = Date.now() + 10 * 60 * 1000;
+    this.lastResendTimestamp = Date.now();
     this.otpAttempts = 0;
 
     return {
       status: 'SUCCESS',
-      message: 'New OTP dispatched successfully to your registered university email.',
+      message: 'A fresh security OTP has been dispatched.',
       cooldownSeconds: this.cooldownDuration,
+      devOtpHint: generatedOtp,
     };
   }
 
@@ -199,12 +219,12 @@ class MockAuthService {
   }
 
   public getCurrentSession(): AuthSession | null {
-    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
-    if (!raw) return null;
+    const saved = localStorage.getItem(SESSION_STORAGE_KEY);
+    if (!saved) return null;
     try {
-      const session: AuthSession = JSON.parse(raw);
+      const session: AuthSession = JSON.parse(saved);
       if (new Date(session.expiresAt).getTime() < Date.now()) {
-        localStorage.removeItem(SESSION_STORAGE_KEY);
+        this.logout();
         return null;
       }
       return session;
@@ -214,12 +234,16 @@ class MockAuthService {
   }
 
   private createSession(user: UserProfile): AuthSession {
+    const now = new Date();
+    const expires = new Date(now.getTime() + 12 * 60 * 60 * 1000);
+
     const session: AuthSession = {
-      token: `mock_jwt_${Math.random().toString(36).substring(2)}_${Date.now()}`,
+      token: `mock_jwt_token_${user.id}_${Date.now()}`,
       user,
-      authenticatedAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(), // 4 hours
+      authenticatedAt: now.toISOString(),
+      expiresAt: expires.toISOString(),
     };
+
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
     return session;
   }

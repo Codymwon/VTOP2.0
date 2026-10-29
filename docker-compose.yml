@@ -1,0 +1,25 @@
+services:
+  vtop-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vtop-app
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+      - JWT_SECRET=vtop-jwt-secret-key-prod-2026
+      - DATABASE_URL=file:./dev.db
+      - FAST2SMS_API_KEY=${FAST2SMS_API_KEY:-}
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_SECURE=${SMTP_SECURE:-true}
+      - SMTP_USER=${SMTP_USER:-akarshsri123@gmail.com}
+      - SMTP_PASS=${SMTP_PASS:-qoxb qbvw sryf rrvz}
+      - SMTP_FROM=${SMTP_FROM:-"VTOP 2.0 Security" <akarshsri123@gmail.com>}
+    restart: unless-stopped
+    volumes:
+      - vtop-data:/app/server/prisma
+volumes:
+  vtop-data:

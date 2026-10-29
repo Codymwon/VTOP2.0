@@ -1,9 +1,10 @@
 export type UserRole = 'student' | 'faculty' | 'admin';
 
 export interface UserProfile {
-  id: string; // Registration Number (e.g. 23BCE1088), Employee ID (e.g. EMP10245), or Admin ID (e.g. ADM1001)
+  id: string; // Registration Number (e.g. 23MIC7209), Employee ID (e.g. EMP10245), or Admin ID (e.g. ADM1001)
   name: string;
   email: string;
+  phone?: string;
   role: UserRole;
   school?: string;
   program?: string;
@@ -26,6 +27,9 @@ export interface LoginCredentials {
   password: string;
   role: UserRole;
   rememberMe?: boolean;
+  deliveryMethod?: 'email' | 'sms';
+  targetEmail?: string;
+  targetPhone?: string;
 }
 
 export interface LoginResult {
@@ -33,7 +37,10 @@ export interface LoginResult {
   message: string;
   session?: AuthSession;
   otpEmailMasked?: string;
+  destinationMasked?: string;
+  channel?: 'EMAIL' | 'SMS';
   cooldownSeconds?: number;
+  devOtpHint?: string;
 }
 
 export interface VerifyOtpResult {
@@ -47,6 +54,7 @@ export interface ResendOtpResult {
   status: 'SUCCESS' | 'COOLDOWN_ACTIVE' | 'ERROR';
   message: string;
   cooldownSeconds: number;
+  devOtpHint?: string;
 }
 
 export interface CampusNotice {

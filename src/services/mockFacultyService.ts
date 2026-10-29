@@ -381,14 +381,17 @@ export const MOCK_FACULTY_DUTY_LEAVES: FacultyDutyLeave[] = [
 
 export const MOCK_FACULTY_NAV_CATEGORIES: NavCategory[] = [
   {
-    id: 'academics',
-    label: 'Instruction & Slots',
+    id: 'facultycourses',
+    label: 'My Courses & Slots',
     iconName: 'BookOpen',
     badge: '3 Courses',
-    items: [
-      { id: 'facultycourses', label: 'My Courses & Slots', href: '#facultycourses' },
-      { id: 'facultyattendance', label: 'Attendance Tracker', href: '#facultyattendance' },
-    ],
+    items: [],
+  },
+  {
+    id: 'facultyattendance',
+    label: 'Attendance Ledger',
+    iconName: 'CheckCircle2',
+    items: [],
   },
   {
     id: 'facultygrading',

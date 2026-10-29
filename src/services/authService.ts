@@ -15,8 +15,17 @@ export type ApiMode = 'mock' | 'live';
 const API_MODE_KEY = 'vtop_api_mode';
 
 export function getStoredApiMode(): ApiMode {
+  // Always default to 'live' and migrate old 'mock' settings
   const saved = localStorage.getItem(API_MODE_KEY);
-  return (saved === 'live') ? 'live' : 'mock'; // Default to 'mock' for offline resilience
+  if (!saved || saved === 'mock') {
+    try {
+      localStorage.setItem(API_MODE_KEY, 'live');
+    } catch {
+      // ignore
+    }
+    return 'live';
+  }
+  return saved as ApiMode;
 }
 
 export function setStoredApiMode(mode: ApiMode): void {
@@ -24,5 +33,5 @@ export function setStoredApiMode(mode: ApiMode): void {
 }
 
 export function getAuthService(mode: ApiMode = getStoredApiMode()): IAuthService {
-  return mode === 'live' ? liveAuthService : mockAuthService;
+  return mode === 'mock' ? mockAuthService : liveAuthService;
 }

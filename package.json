@@ -4,8 +4,18 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
+    "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"magenta,cyan\" \"npm run server\" \"npm run dev\"",
+    "dev:all": "concurrently -n \"BACKEND,FRONTEND\" -c \"magenta,cyan\" \"npm run server\" \"npm run dev\"",
     "dev": "vite",
+    "server": "npm --prefix server run dev",
+    "server:seed": "npm --prefix server run prisma:seed",
+    "server:studio": "npm --prefix server run studio",
+    "server:add-user": "npm --prefix server run user:add --",
+    "server:setup": "npm --prefix server run db:setup",
     "build": "tsc -b && vite build",
+    "build:all": "npm run build && npm --prefix server run prisma:generate && npm --prefix server run build",
+    "build:prod": "npm run build && npm --prefix server install && npm --prefix server run prisma:push && npm --prefix server run prisma:seed && npm --prefix server run build",
+    "start:prod": "node server/dist/index.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -20,6 +30,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^9.1.2",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.0"

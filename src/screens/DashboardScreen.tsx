@@ -100,6 +100,13 @@ export const DashboardScreen: React.FC = () => {
       // -----------------------------------------------------------------------
       case 'courses':
       case 'coursepage':
+        if (user?.role === 'faculty') {
+          return (
+            <FacultyCoursesPageView
+              onBackToDashboard={() => setActiveSection('overview')}
+            />
+          );
+        }
         return (
           <CoursesPageView
             onBackToDashboard={() => setActiveSection('overview')}

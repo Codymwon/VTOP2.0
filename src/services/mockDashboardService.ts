@@ -15,8 +15,8 @@ import {
 } from '../types/dashboard';
 
 export const MOCK_STUDENT_PROFILE: StudentProfile = {
-  name: 'ARJUN K SHARMA',
-  regNo: '23BCE1088',
+  name: 'AKARSH',
+  regNo: '23MIC7209',
   applicationNo: '2023108842',
   dob: '15-Jul-2005',
   gender: 'MALE',
@@ -575,7 +575,7 @@ export const MOCK_DIGITAL_ASSIGNMENTS: DigitalAssignmentItem[] = [
     dueDate: '10-Nov-2026',
     status: 'Uploaded',
     daysRemaining: 5,
-    fileDetails: 'CSE4012_ReqGathering_23BCE1088.pdf (2.1 MB)',
+    fileDetails: 'CSE4012_ReqGathering_23MIC7209.pdf (2.1 MB)',
   },
   {
     id: 'da-3',
@@ -587,7 +587,7 @@ export const MOCK_DIGITAL_ASSIGNMENTS: DigitalAssignmentItem[] = [
     dueDate: '10-Nov-2026',
     status: 'Uploaded',
     daysRemaining: 5,
-    fileDetails: 'CSE4012_DesignArchitecture_23BCE1088.pdf (3.4 MB)',
+    fileDetails: 'CSE4012_DesignArchitecture_23MIC7209.pdf (3.4 MB)',
   },
   {
     id: 'da-4',
