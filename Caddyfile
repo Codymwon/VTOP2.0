@@ -1,0 +1,8 @@
+:80 {
+    reverse_proxy vtop-app:8080
+}
+
+:443 {
+    tls internal
+    reverse_proxy vtop-app:8080
+}

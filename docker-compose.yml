@@ -4,8 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: vtop-app
+    expose:
+      - "8080"
     ports:
-      - "80:8080"
       - "8080:8080"
     env_file:
       - .env
@@ -31,5 +32,21 @@ services:
       retries: 3
       start_period: 15s
 
+  caddy:
+    image: caddy:alpine
+    container_name: vtop-ssl-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - vtop-app
+
 volumes:
   vtop-data:
+  caddy_data:
+  caddy_config:
