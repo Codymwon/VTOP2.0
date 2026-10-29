@@ -5,7 +5,7 @@ WORKDIR /app
 
 # 1. Install root dependencies and build frontend
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 RUN npm run build
@@ -13,7 +13,7 @@ RUN npm run build
 # 2. Install server dependencies and build backend
 WORKDIR /app/server
 COPY server/package*.json ./
-RUN npm ci
+RUN npm install
 COPY server/ ./
 RUN npx prisma generate
 RUN npm run build
