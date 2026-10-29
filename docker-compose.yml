@@ -7,18 +7,20 @@ services:
     ports:
       - "80:8080"
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       - PORT=8080
       - NODE_ENV=production
-      - JWT_SECRET=vtop-jwt-secret-key-prod-2026
+      - JWT_SECRET=${JWT_SECRET:-vtop-jwt-secret-key-prod-2026}
       - DATABASE_URL=file:./dev.db
       - FAST2SMS_API_KEY=${FAST2SMS_API_KEY:-}
       - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
       - SMTP_PORT=${SMTP_PORT:-465}
       - SMTP_SECURE=${SMTP_SECURE:-true}
-      - SMTP_USER=${SMTP_USER:-akarshsri123@gmail.com}
-      - SMTP_PASS=${SMTP_PASS:-qoxb qbvw sryf rrvz}
-      - SMTP_FROM=${SMTP_FROM:-"VTOP 2.0 Security" <akarshsri123@gmail.com>}
+      - SMTP_USER=${SMTP_USER:-akarsh.23mic7209@vitapstudent.ac.in}
+      - SMTP_PASS=${SMTP_PASS:-jfwxwvdymadgnvry}
+      - SMTP_FROM=${SMTP_FROM:-"VTOP 2.0 Security" <akarsh.23mic7209@vitapstudent.ac.in>}
     restart: unless-stopped
     volumes:
       - vtop-data:/app/server/prisma
